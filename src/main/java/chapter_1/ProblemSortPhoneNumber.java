@@ -36,17 +36,18 @@ public class ProblemSortPhoneNumber {
     public void generateTestFileWithoutDupValue(final String toFilePath) {
     }
 
-    public void testCaseHaveDupValue() {
+    public void testCaseHaveDupValue() throws FileNotFoundException {
         final String testFiePath = "TODO";
         generateTestFileWithDupValue(testFiePath);
         sort(testFiePath);
         //TODO: should exception
     }
 
-    public void testCaseWithoutDupValue() {
+    public void testCaseWithoutDupValue() throws FileNotFoundException {
         final String testFilePath = "TODO";
         generateTestFileWithoutDupValue(testFilePath);
         List<Integer> sortedPhoneNumber = sort(testFilePath);
+        assert isSorted(sortedPhoneNumber);
     }
 
     public boolean isSorted(List<Integer> integerList) {
