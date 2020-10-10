@@ -65,6 +65,9 @@ public class ProblemSortPhoneNumber {
 
 
     public static void main(String[] args) {
-        System.out.println(Integer.MAX_VALUE);
+        byte[] x = new byte[10];
+        for (byte b : x) {
+            System.out.println(b);
+        }
     }
 }
