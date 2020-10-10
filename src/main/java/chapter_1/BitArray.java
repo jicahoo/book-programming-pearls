@@ -1,23 +1,24 @@
 package chapter_1;
 
+import java.util.List;
 import java.util.Set;
 
 /**
  * https://en.wikipedia.org/wiki/Bit_array
  */
-abstract class BitArray {
-    public BitArray(long n) {
+class BitArray {
+    public BitArray(int n) {
     }
 
-    public boolean add(long i) {
+    public boolean add(int i) {
         return false;
     }
 
-    public boolean contains(long i) {
+    public boolean contains(int i) {
         return false;
     }
 
-    public long count() {
+    public int count() {
         return 0;
     }
 
@@ -37,7 +38,7 @@ abstract class BitArray {
         return null;
     }
 
-    public Set<Long> getElements() {
+    public List<Integer> getSortedElements() {
         return null;
     }
 }
