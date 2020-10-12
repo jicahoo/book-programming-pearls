@@ -81,6 +81,5 @@ class BitArray {
         bitArray.getSortedElements().forEach(System.out::println);
         bitArray.remove(2);
         bitArray.getSortedElements().forEach(System.out::println);
-
     }
 }

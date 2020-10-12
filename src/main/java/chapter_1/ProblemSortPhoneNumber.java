@@ -33,6 +33,12 @@ public class ProblemSortPhoneNumber {
     public void generateTestFileWithDupValue(final String toFilePath) {
     }
 
+    /**
+     * https://stackoverflow.com/questions/16000196/java-generating-non-repeating-random-numbers/16000210
+     *  Collections.shuffle, Programming Pearls p. 127.,  Fisher–Yates shuffle
+     * https://stackoverflow.com/questions/4040001/creating-random-numbers-with-no-duplicates
+     * @param toFilePath
+     */
     public void generateTestFileWithoutDupValue(final String toFilePath) {
     }
 
