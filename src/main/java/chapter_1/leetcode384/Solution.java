@@ -7,26 +7,19 @@ import java.util.Random;
  * Accepted.After 2 times tries. First time, I try to cache the shuffle result.
  */
 class Solution {
-    private int[] backup;
-    private int[] a;
-    private boolean isShuffed;
+    private final int[] backup;
+    private final int[] a;
 
     public Solution(int[] nums) {
-
         a = nums;
         backup = new int[a.length];
-        for (int i = 0; i < a.length; i++) {
-            backup[i] = a[i];
-        }
-        isShuffed = false;
+        System.arraycopy(a, 0, backup, 0, a.length);
 
     }
 
     /** Resets the array to its original configuration and return it. */
     public int[] reset() {
-        for (int i = 0; i < backup.length; i++) {
-            a[i] = backup[i];
-        }
+        System.arraycopy(backup, 0, a, 0, backup.length);
         return a;
     }
 
