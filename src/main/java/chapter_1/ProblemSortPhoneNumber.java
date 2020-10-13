@@ -30,6 +30,14 @@ public class ProblemSortPhoneNumber {
         return bitArray.getSortedElements();
     }
 
+    public List<Integer> sort(final int[] a) {
+        BitArray bitArray = new BitArray((int) Math.pow(10, 7));
+        for (int i : a) {
+            bitArray.add(i);
+        }
+        return bitArray.getSortedElements();
+    }
+
     public void generateTestFileWithDupValue(final String toFilePath) {
     }
 
@@ -39,7 +47,20 @@ public class ProblemSortPhoneNumber {
      * https://stackoverflow.com/questions/4040001/creating-random-numbers-with-no-duplicates
      * @param toFilePath
      */
-    public void generateTestFileWithoutDupValue(final String toFilePath) {
+    public  int[] generateTestFileWithoutDupValue(final String toFilePath) {
+        int n = (int) Math.pow(10, 7);
+        int[] a = new int[n];
+        for (int i = 0; i < a.length; i++) {
+            a[i] = i;
+        }
+
+        Shuffle shuffle = new Shuffle();
+        shuffle.knuthDurstenfeldShuffle(a);
+        for (int i = 0; i < 100; i++) {
+            System.out.print(a[i] + " ");
+        }
+        System.out.println();
+        return a;
     }
 
     public void testCaseHaveDupValue() throws FileNotFoundException {
@@ -68,12 +89,13 @@ public class ProblemSortPhoneNumber {
         return true;
     }
 
-
-
     public static void main(String[] args) {
-        byte[] x = new byte[10];
-        for (byte b : x) {
-            System.out.println(b);
+        ProblemSortPhoneNumber problemSortPhoneNumber = new ProblemSortPhoneNumber();
+        int[] inputArray = problemSortPhoneNumber.generateTestFileWithoutDupValue("");
+        List<Integer>  outputList = problemSortPhoneNumber.sort(inputArray);
+        for (int i = 0; i < 100; i++) {
+            System.out.print(outputList.get(i) + " ");
         }
+        System.out.println();
     }
 }
