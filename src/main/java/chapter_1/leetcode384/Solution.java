@@ -11,16 +11,15 @@ class Solution {
     private final int[] a;
 
     public Solution(int[] nums) {
-        a = nums;
-        backup = new int[a.length];
-        System.arraycopy(a, 0, backup, 0, a.length);
+        backup = nums;
+        a = new int[backup.length];
+        System.arraycopy(backup, 0, a, 0, a.length);
 
     }
 
     /** Resets the array to its original configuration and return it. */
     public int[] reset() {
-        System.arraycopy(backup, 0, a, 0, backup.length);
-        return a;
+        return backup;
     }
 
     /** Returns a random shuffling of the array. */
