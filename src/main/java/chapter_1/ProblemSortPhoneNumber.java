@@ -3,8 +3,7 @@ package chapter_1;
 import javax.xml.ws.soap.MTOMFeature;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class ProblemSortPhoneNumber {
 
@@ -36,6 +35,25 @@ public class ProblemSortPhoneNumber {
             bitArray.add(i);
         }
         return bitArray.getSortedElements();
+    }
+
+    /**
+     * Book chapter 1, exercise 1 (1.6 section).
+     * @param a
+     * @return
+     */
+    public Iterator<Integer> sortUseJdk(final int[] a) {
+        TreeSet<Integer> treeSet = new TreeSet<Integer>();
+
+
+        for (int i : a) {
+            if (treeSet.contains(i)) {
+                throw new IllegalStateException("Duplicate record.");
+            } else {
+                treeSet.add(i);
+            }
+        }
+        return treeSet.iterator();
     }
 
     public void generateTestFileWithDupValue(final String toFilePath) {
@@ -89,7 +107,9 @@ public class ProblemSortPhoneNumber {
         return true;
     }
 
-    public static void main(String[] args) {
+    public static void solutionUseBitVevtor() {
+
+        // Only need 0.7 seconds, no more than 1 second.
         ProblemSortPhoneNumber problemSortPhoneNumber = new ProblemSortPhoneNumber();
         int[] inputArray = problemSortPhoneNumber.generateTestFileWithoutDupValue("");
         List<Integer>  outputList = problemSortPhoneNumber.sort(inputArray);
@@ -97,5 +117,43 @@ public class ProblemSortPhoneNumber {
             System.out.print(outputList.get(i) + " ");
         }
         System.out.println();
+    }
+
+    public static void solutionUseTreeSet() {
+        // What about List? More slower? If use List, it will last a long time. Use tree set, about 13 seconds
+        // on my machine.
+        ProblemSortPhoneNumber problemSortPhoneNumber = new ProblemSortPhoneNumber();
+        int[] inputArray = problemSortPhoneNumber.generateTestFileWithoutDupValue("");
+        Iterator<Integer> intIter = problemSortPhoneNumber.sortUseJdk(inputArray);
+        int i = 0;
+        System.out.println("First 100 items after sorting.");
+        while (i < 100 && intIter.hasNext()) {
+            System.out.print(intIter.next() + " ");
+            i++;
+        }
+        System.out.println();
+    }
+
+    public void timingAnalyze() {
+        long start = System.currentTimeMillis();
+        solutionUseBitVevtor();
+        long end = System.currentTimeMillis();
+        long duration = end - start;
+        System.out.println("BitVector duration: " + duration/1000.0 + " secs.");
+
+        start = System.currentTimeMillis();
+        solutionUseTreeSet();
+        end = System.currentTimeMillis();
+        duration = end - start;
+
+        System.out.println("TreeSet duration: " + duration/1000.0 + " secs.");
+    }
+
+    public void memoryAnalyze() {
+       //TODO?
+    }
+
+    public static void main(String[] args) {
+        solutionUseTreeSet();
     }
 }
