@@ -1,8 +1,7 @@
-package chapter_1;
+package chapter_1.problem_sort_phonenumber;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * https://en.wikipedia.org/wiki/Bit_array

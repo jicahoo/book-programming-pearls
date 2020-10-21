@@ -1,6 +1,5 @@
-package chapter_1;
+package chapter_1.problem_sort_phonenumber;
 
-import javax.xml.ws.soap.MTOMFeature;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -202,10 +201,6 @@ public class ProblemSortPhoneNumber {
         long userCpuTime = mxBean.getCurrentThreadUserTime();
         System.out.println("Total CPU TIME: " + totalCpuTime + " nanoseconds");
         System.out.println("User  CPU TIME: " + userCpuTime + " nanoseconds");
-        Thread.sleep(10 * 1000);
-        totalCpuTime = mxBean.getCurrentThreadCpuTime();
-        userCpuTime = mxBean.getCurrentThreadUserTime();
-        System.out.println("Total CPU TIME: " + totalCpuTime + " nanoseconds");
-        System.out.println("User  CPU TIME: " + userCpuTime + " nanoseconds");
+
     }
 }
