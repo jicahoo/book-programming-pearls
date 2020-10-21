@@ -3,10 +3,17 @@ package chapter_1;
 import javax.xml.ws.soap.MTOMFeature;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
+import java.lang.management.ThreadMXBean;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class ProblemSortPhoneNumber {
-
+    private static List<Object> globalVar = new ArrayList<>();
     /**
      * In file filePath, it contains phone number whose count is less than 10^7 and values is less than 10^7.
      * If there is duplicate record, it's an error.
@@ -34,6 +41,7 @@ public class ProblemSortPhoneNumber {
         for (int i : a) {
             bitArray.add(i);
         }
+        globalVar.add(bitArray);
         return bitArray.getSortedElements();
     }
 
@@ -112,14 +120,16 @@ public class ProblemSortPhoneNumber {
         // Only need 0.7 seconds, no more than 1 second.
         ProblemSortPhoneNumber problemSortPhoneNumber = new ProblemSortPhoneNumber();
         int[] inputArray = problemSortPhoneNumber.generateTestFileWithoutDupValue("");
+        globalVar.add(inputArray);
         List<Integer>  outputList = problemSortPhoneNumber.sort(inputArray);
+        globalVar.add(outputList);
         for (int i = 0; i < 100; i++) {
             System.out.print(outputList.get(i) + " ");
         }
         System.out.println();
     }
 
-    public static void solutionUseTreeSet() {
+    public static void solutionUseTreeSet()  {
         // What about List? More slower? If use List, it will last a long time. Use tree set, about 13 seconds
         // on my machine.
         ProblemSortPhoneNumber problemSortPhoneNumber = new ProblemSortPhoneNumber();
@@ -130,6 +140,11 @@ public class ProblemSortPhoneNumber {
         while (i < 100 && intIter.hasNext()) {
             System.out.print(intIter.next() + " ");
             i++;
+        }
+        try {
+            Thread.sleep(100 * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         System.out.println();
     }
@@ -149,11 +164,48 @@ public class ProblemSortPhoneNumber {
         System.out.println("TreeSet duration: " + duration/1000.0 + " secs.");
     }
 
-    public void memoryAnalyze() {
-       //TODO?
+    public static String getPid() {
+        RuntimeMXBean bean = ManagementFactory.getRuntimeMXBean();
+        String jvmName = bean.getName();
+        System.out.println("Name = " + jvmName);
+        String pid = jvmName.split("@")[0];
+        return pid;
+
+    }
+    public static void dumpProcInfoOfCurrentProcess() {
+        //Get pid
+        String pid = getPid();
+        //Store pid stat file
+        String statFilePath = "/proc/" + pid + "/stat";
+        Path path = Paths.get(statFilePath);
+        String toPath = "/home/jichao/" + pid + "_stat";
+        try {
+            Files.copy(path, Paths.get(toPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void dumpProcInfoAfterJvmShutdown() {
+        Runtime.getRuntime().addShutdownHook(new Thread()
+        {
+            public void run()
+            {
+                dumpProcInfoOfCurrentProcess();
+            }
+        });
     }
 
-    public static void main(String[] args) {
-        solutionUseTreeSet();
+    public static void main(String[] args) throws InterruptedException {
+        solutionUseBitVevtor();
+        ThreadMXBean mxBean = ManagementFactory.getThreadMXBean();
+        long totalCpuTime = mxBean.getCurrentThreadCpuTime();
+        long userCpuTime = mxBean.getCurrentThreadUserTime();
+        System.out.println("Total CPU TIME: " + totalCpuTime + " nanoseconds");
+        System.out.println("User  CPU TIME: " + userCpuTime + " nanoseconds");
+        Thread.sleep(10 * 1000);
+        totalCpuTime = mxBean.getCurrentThreadCpuTime();
+        userCpuTime = mxBean.getCurrentThreadUserTime();
+        System.out.println("Total CPU TIME: " + totalCpuTime + " nanoseconds");
+        System.out.println("User  CPU TIME: " + userCpuTime + " nanoseconds");
     }
 }
