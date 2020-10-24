@@ -1,5 +1,8 @@
 package chapter_1.problem_sort_phonenumber;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +69,21 @@ class BitArray {
             }
         }
         return result;
+    }
+
+    public void printToFile(final String outputFilePath) throws IOException {
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(outputFilePath));
+        for (int i = 0; i < bytes.length; i++) {
+            byte byteValue = bytes[i];
+            for (int j = 0; j < 8; j++) {
+                int mask = 0x80 >> j;
+                if (0 != (byteValue & mask)) {
+                    bufferedWriter.write(Integer.toString(i * 8 + j));
+                    bufferedWriter.newLine();
+                }
+            }
+        }
+        bufferedWriter.close();
     }
 
     private byte[] bytes;

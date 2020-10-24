@@ -10,8 +10,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SolutionMergeSort {
-    private static final String MID_FILE_PATH_PREFIX = "src\\main\\java\\chapter_1\\problem_sort_phonenumber\\mid_";
-    private static final int PAGE_SIZE = 100;
+    private static final String MID_FILE_PATH = "src\\main\\java\\chapter_1\\problem_sort_phonenumber\\temp";
+    private static final String MID_FILE_NAME_PREFIX = "mid_";
+    //private static final int PAGE_SIZE = 100;
+    private static final int PAGE_SIZE = (1024*1024)/4; //1MB can store how many 4 byte ints?
 
     public void mergeSort(final String inputFilePath, final String outputFilePath) throws IOException {
         List<String> midFilePaths = sortToMidFiles(inputFilePath);
@@ -36,24 +38,28 @@ public class SolutionMergeSort {
             dataCount++;
             if (dataCount == PAGE_SIZE|| !iter.hasNext()) {
                 Collections.sort(pageBuffer);
+                assert pageBuffer.size() <= PAGE_SIZE;
                 writeToMidFile(pageBuffer, midFileNum++, midFilePaths);
                 dataCount = 0;
-                pageBuffer.clear();//erreop
+                pageBuffer.clear();//error
             }
         }
         return midFilePaths;
     }
 
     private void writeToMidFile(List<Integer> pageBuffer, int i, List<String> midFilePaths) throws IOException {
-        String inputFilePath = MID_FILE_PATH_PREFIX + i + ".txt";
+        if (!Files.exists(Paths.get(MID_FILE_PATH))) {
+            Files.createDirectory(Paths.get(MID_FILE_PATH));
+        }
+        String inputFilePath = MID_FILE_PATH + "\\" + MID_FILE_NAME_PREFIX+ i + ".txt";
         midFilePaths.add(inputFilePath);
         List<String> lines = pageBuffer.stream().map(Object::toString).collect(Collectors.toList());
         Files.write(Paths.get(inputFilePath), lines);
     }
 
-    class CacheIterator<T> implements Iterator<T> {
+    static class CacheIterator<T> implements Iterator<T> {
         private T cachedOneValue;
-        private Iterator<T> originalIterator;
+        private final Iterator<T> originalIterator;
 
         CacheIterator(Iterator<T> iter) {
             originalIterator = iter;
@@ -91,10 +97,7 @@ public class SolutionMergeSort {
             MinResult minResult = getMinUseCachedIter(iters);
             writer.write(minResult.min.toString());
             writer.newLine();
-            writer.flush();
-//            if (minResult.minIter == null) {
-//                break;
-//            }
+            //writer.flush();
             if (!minResult.minIter.hasNext()) {
                 iters.remove(minResult.minIter);
             }
@@ -104,42 +107,14 @@ public class SolutionMergeSort {
     static class MinResult {
         public Integer min;
         public CacheIterator<String> minIter;
-        public boolean found;
-    }
-
-    MinResult getMin(List<ListIterator<String>> iters) {
-        MinResult minResult = new MinResult();
-        minResult.min = Integer.MAX_VALUE;
-        minResult.minIter = null;
-        minResult.found = false;
-        for (ListIterator<String> iter : iters) {
-            if (iter.hasNext()) {
-                String intStr = iter.next();
-                int curInt = Integer.parseInt(intStr);
-                if (curInt < minResult.min) {
-                    minResult.min = curInt;
-                    minResult.found = true;
-                }
-            }
-        }
-        for (ListIterator<String> iter : iters) {
-            if (iter != minResult.minIter) {
-                iter.previous();
-            }
-        }
-        boolean anyOneHasNext = iters.stream().anyMatch(Iterator::hasNext);
-
-        if (null == minResult.minIter) {
-            throw new IllegalStateException();
-        }
-        return minResult;
     }
 
     MinResult getMinUseCachedIter(List<CacheIterator<String>> iters) {
+        assert iters.stream().allMatch(CacheIterator::hasNext);
+
         MinResult minResult = new MinResult();
         minResult.min = Integer.MAX_VALUE;
         minResult.minIter = null;
-        minResult.found = false;
         Map<CacheIterator<String>, String> cache = new HashMap<>();
         for (CacheIterator<String> iter : iters) {
             if (iter.hasNext()) {
@@ -149,7 +124,6 @@ public class SolutionMergeSort {
                 if (curInt < minResult.min) {
                     minResult.min = curInt;
                     minResult.minIter = iter;
-                    minResult.found = true;
                 }
             }
         }
@@ -160,11 +134,8 @@ public class SolutionMergeSort {
                 iter.setCachedOneValue(null);
             }
         }
-        boolean anyOneHasNext = iters.stream().anyMatch(Iterator::hasNext);
 
-        if (null == minResult.minIter) {
-            throw new IllegalStateException();
-        }
+        assert null != minResult.minIter;
         return minResult;
     }
 
@@ -181,7 +152,7 @@ public class SolutionMergeSort {
 
     public CacheIterator<String> getCachedIterator(final String filePath) {
         try {
-            return new CacheIterator(Files.lines(Paths.get(filePath)).iterator());
+            return new CacheIterator<>(Files.lines(Paths.get(filePath)).iterator());
         } catch (IOException e) {
             e.printStackTrace();
             //TODO:
@@ -217,9 +188,13 @@ public class SolutionMergeSort {
     }
 
     public static void main(String[] args) throws IOException {
-        String inputFilePath = "src\\main\\java\\chapter_1\\problem_sort_phonenumber\\RandomInt_1000.txt";
-        String outputFilePath = "src\\main\\java\\chapter_1\\problem_sort_phonenumber\\Sorted_RandomInt_1000.txt";
+        long time = System.currentTimeMillis();
+        int numCnt = (int) Math.pow(10, 7);
+        String inputFilePath = "src\\main\\java\\chapter_1\\problem_sort_phonenumber\\RandomInt_" + numCnt + ".txt";
+        String outputFilePath = "src\\main\\java\\chapter_1\\problem_sort_phonenumber\\Sorted_RandomInt_" + numCnt + ".txt";
         SolutionMergeSort s = new SolutionMergeSort();
         s.mergeSort(inputFilePath, outputFilePath);
+        time = System.currentTimeMillis() - time;
+        System.out.println(time/1000 + " seconds.");
     }
 }

@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class ProblemSortPhoneNumber {
-    private static List<Object> globalVar = new ArrayList<>();
+    private static final List<Object> globalVar = new ArrayList<>();
     /**
      * In file filePath, it contains phone number whose count is less than 10^7 and values is less than 10^7.
      * If there is duplicate record, it's an error.
@@ -42,6 +42,17 @@ public class ProblemSortPhoneNumber {
         }
         globalVar.add(bitArray);
         return bitArray.getSortedElements();
+    }
+
+    public void sort(final String inputFile, final String outputFile) throws IOException {
+        int numCnt = (int) Math.pow(10, 7);
+        BitArray bitArray = new BitArray(numCnt);
+        Iterator<String> lineIter = Files.lines(Paths.get(inputFile)).iterator();
+        while (lineIter.hasNext()) {
+            int num = Integer.parseInt(lineIter.next());
+            bitArray.add(num);
+        }
+        bitArray.printToFile(outputFile);
     }
 
     /**
@@ -194,13 +205,23 @@ public class ProblemSortPhoneNumber {
         });
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        solutionUseBitVevtor();
-        ThreadMXBean mxBean = ManagementFactory.getThreadMXBean();
-        long totalCpuTime = mxBean.getCurrentThreadCpuTime();
-        long userCpuTime = mxBean.getCurrentThreadUserTime();
-        System.out.println("Total CPU TIME: " + totalCpuTime + " nanoseconds");
-        System.out.println("User  CPU TIME: " + userCpuTime + " nanoseconds");
+    public static void main(String[] args) throws InterruptedException, IOException {
+//        solutionUseBitVevtor();
+//        ThreadMXBean mxBean = ManagementFactory.getThreadMXBean();
+//        long totalCpuTime = mxBean.getCurrentThreadCpuTime();
+//        long userCpuTime = mxBean.getCurrentThreadUserTime();
+//        System.out.println("Total CPU TIME: " + totalCpuTime + " nanoseconds");
+//        System.out.println("User  CPU TIME: " + userCpuTime + " nanoseconds");
+
+        long time = System.currentTimeMillis();
+        ProblemSortPhoneNumber p = new ProblemSortPhoneNumber();
+        int numCnt = (int) Math.pow(10, 7);
+        String inputFilePath = "src\\main\\java\\chapter_1\\problem_sort_phonenumber\\RandomInt_" + numCnt + ".txt";
+        String outputFilePath = "src\\main\\java\\chapter_1\\problem_sort_phonenumber\\Sorted_RandomInt_" + numCnt + ".txt";
+        p.sort(inputFilePath, outputFilePath);
+        time = System.currentTimeMillis() - time;
+        System.out.println(time/1000+" seconds");
+
 
     }
 }
