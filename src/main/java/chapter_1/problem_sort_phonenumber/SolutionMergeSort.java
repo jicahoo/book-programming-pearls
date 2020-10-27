@@ -190,8 +190,8 @@ public class SolutionMergeSort {
     public static void main(String[] args) throws IOException {
         long time = System.currentTimeMillis();
         int numCnt = (int) Math.pow(10, 7);
-        String inputFilePath = "src\\main\\java\\chapter_1\\problem_sort_phonenumber\\RandomInt_" + numCnt + ".txt";
-        String outputFilePath = "src\\main\\java\\chapter_1\\problem_sort_phonenumber\\Sorted_RandomInt_" + numCnt + ".txt";
+        String inputFilePath = "src/main/java/chapter_1/problem_sort_phonenumber/RandomInt_" + numCnt + ".txt";
+        String outputFilePath = "src/main/java/chapter_1/problem_sort_phonenumber/Sorted_RandomInt_" + numCnt + ".txt";
         SolutionMergeSort s = new SolutionMergeSort();
         s.mergeSort(inputFilePath, outputFilePath);
         time = System.currentTimeMillis() - time;

@@ -37,7 +37,7 @@ public class Shuffle {
     }
     public void writeToFile() throws IOException {
         int n = (int) Math.pow(10, 7);
-        String outputFilePath = "src\\main\\java\\chapter_1\\problem_sort_phonenumber\\RandomInt_" + n + ".txt";
+        String outputFilePath = "src/main/java/chapter_1/problem_sort_phonenumber/RandomInt_" + n + ".txt";
         BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath));
         int[] arr = new int[n];
         for (int i = 0; i < n; i++) {
