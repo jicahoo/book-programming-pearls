@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SolutionMergeSort {
-    private static final String MID_FILE_PATH = "src\\main\\java\\chapter_1\\problem_sort_phonenumber\\temp";
+    private static final String MID_FILE_PATH = "src/main/java/chapter_1/problem_sort_phonenumber/temp";
     private static final String MID_FILE_NAME_PREFIX = "mid_";
     //private static final int PAGE_SIZE = 100;
     private static final int PAGE_SIZE = (1024*1024)/4; //1MB can store how many 4 byte ints?
@@ -51,7 +51,7 @@ public class SolutionMergeSort {
         if (!Files.exists(Paths.get(MID_FILE_PATH))) {
             Files.createDirectory(Paths.get(MID_FILE_PATH));
         }
-        String inputFilePath = MID_FILE_PATH + "\\" + MID_FILE_NAME_PREFIX+ i + ".txt";
+        String inputFilePath = MID_FILE_PATH + "/" + MID_FILE_NAME_PREFIX+ i + ".txt";
         midFilePaths.add(inputFilePath);
         List<String> lines = pageBuffer.stream().map(Object::toString).collect(Collectors.toList());
         Files.write(Paths.get(inputFilePath), lines);
@@ -177,7 +177,7 @@ public class SolutionMergeSort {
     }
 
     private static void iterateFileLines() throws IOException {
-        String inputFilePath = "src\\main\\java\\chapter_1\\problem_sort_phonenumber\\mid_9.txt";
+        String inputFilePath = "src/main/java/chapter_1/problem_sort_phonenumber/mid_9.txt";
         Stream<String> lines = Files.lines(Paths.get(inputFilePath));
         Iterator<String> lineIter = lines.iterator();
         int i = 0;
