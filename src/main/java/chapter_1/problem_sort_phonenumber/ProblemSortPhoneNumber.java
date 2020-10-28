@@ -205,7 +205,7 @@ public class ProblemSortPhoneNumber {
         });
     }
 
-    public static void main(String[] args) throws InterruptedException, IOException {
+    public static void main(String[] args) throws IOException {
 //        solutionUseBitVevtor();
 //        ThreadMXBean mxBean = ManagementFactory.getThreadMXBean();
 //        long totalCpuTime = mxBean.getCurrentThreadCpuTime();
@@ -216,12 +216,11 @@ public class ProblemSortPhoneNumber {
         long time = System.currentTimeMillis();
         ProblemSortPhoneNumber p = new ProblemSortPhoneNumber();
         int numCnt = (int) Math.pow(10, 7);
-        String inputFilePath = "src\\main\\java\\chapter_1\\problem_sort_phonenumber\\RandomInt_" + numCnt + ".txt";
-        String outputFilePath = "src\\main\\java\\chapter_1\\problem_sort_phonenumber\\Sorted_RandomInt_" + numCnt + ".txt";
+        String inputFilePath = "src/main/java/chapter_1/problem_sort_phonenumber/RandomInt_" + numCnt + ".txt";
+        String outputFilePath = "src/main/java/chapter_1/problem_sort_phonenumber/Sorted_RandomInt_" + numCnt + ".txt";
         p.sort(inputFilePath, outputFilePath);
         time = System.currentTimeMillis() - time;
         System.out.println(time/1000+" seconds");
-
 
     }
 }
