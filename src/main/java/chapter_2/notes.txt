@@ -1,0 +1,4 @@
+# How to load big file
+* https://www.java-success.com/processing-large-files-efficiently-java-part-1/
+* https://alvinalexander.com/scala/different-ways-read-large-text-file-with-scala-performance/
+* https://stackoverflow.com/questions/14037404/java-read-large-text-file-with-70million-line-of-text

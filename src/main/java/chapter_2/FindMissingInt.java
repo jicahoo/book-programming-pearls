@@ -252,6 +252,52 @@ public class FindMissingInt {
         return idx;
     }
 
+    public static int binarySearchV6(int t, int[] a, int startIdx, int endIdx) {
+        int idx = -1;
+        if (startIdx <= endIdx) {
+            int mid = startIdx +  (endIdx - startIdx) / 2;
+            if (a[mid] == t) {
+                idx = mid;
+            } else if (a[mid] < t) {
+                idx = binarySearchV6(t, a, mid + 1, endIdx);
+            } else {
+                idx = binarySearchV6(t, a, startIdx, mid - 1);
+            }
+        }
+        return idx;
+    }
+
+    public static int binarySearchV7(int t, int[] a, int startIdx, int endIdx) {
+        int idx = -1;
+        if (startIdx <= endIdx) {
+            int mid = (startIdx + endIdx) / 2;
+            if (a[mid] == t) {
+                idx = mid;
+            } else if (a[mid] < t) {
+                idx = binarySearchV7(t, a, mid + 1, endIdx);
+            } else {
+                idx = binarySearchV7(t, a, startIdx, mid - 1);
+            }
+        }
+        return idx;
+    }
+
+    public static int binarySearchV8(int t, int[] a, int startIdx, int endIdx) {
+        int idx = -1;
+        while (startIdx <= endIdx) {
+            int m = (startIdx + endIdx) /2;
+            if (t == a[m]) {
+                idx = m;
+                break;
+            } else if (t < a[m]) {
+                endIdx = m - 1;
+            } else {
+                startIdx = m + 1;
+            }
+        }
+        return idx;
+    }
+
     public static String multiple(String base, int num) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < num; i++) {
@@ -262,10 +308,10 @@ public class FindMissingInt {
 
     public static void testBinarySearch() {
         int[] a = new int[]{100, 200, 300, 400, 500, 600, 700, 800, 900, 1000};
-        System.out.println(binarySearchV5(10, a, 0, a.length - 1, 0));
-        System.out.println(binarySearchV5(500, a, 0, a.length - 1, 0));
-        System.out.println(binarySearchV5(100, a, 0, a.length - 1, 0));
-        System.out.println(binarySearchV5(1000, a, 0, a.length - 1, 0));
+        System.out.println(binarySearchV8(10, a, 0, a.length - 1));
+        System.out.println(binarySearchV8(500, a, 0, a.length - 1));
+        System.out.println(binarySearchV8(100, a, 0, a.length - 1));
+        System.out.println(binarySearchV8(1000, a, 0, a.length - 1));
     }
 
     public void generateInputFile() throws IOException {
@@ -306,6 +352,6 @@ public class FindMissingInt {
 
     public static void main(String[] args) throws IOException {
         //testBinarySearch();
-        searchIntRangeV2(-9, 11);
+        testBinarySearch();
     }
 }
