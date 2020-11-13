@@ -2,3 +2,32 @@
 * https://www.java-success.com/processing-large-files-efficiently-java-part-1/
 * https://alvinalexander.com/scala/different-ways-read-large-text-file-with-scala-performance/
 * https://stackoverflow.com/questions/14037404/java-read-large-text-file-with-70million-line-of-text
+
+# How to caculate the  performance (speed/bandwith) of disk/fs?
+* https://arstechnica.com/gadgets/2020/02/how-fast-are-your-disks-find-out-the-open-source-way-with-fio/
+* https://www.shellhacks.com/disk-speed-test-read-write-hdd-ssd-perfomance-linux/
+* https://www.cyberciti.biz/faq/howto-linux-unix-test-disk-performance-with-dd-command/
+
+# FIO (flexible I/O tester)
+* https://tobert.github.io/post/2014-04-17-fio-output-explained.html
+* https://juicefs.com/docs/zh/single_node_benchmark.html
+fio --name=big-file-sequential-read \
+    --directory=./temp \
+    --rw=read --refill_buffers \
+    --bs=256k --size=4G
+
+# DTrace java
+* If use Java NIO read big file, what's the underlying system call?
+    * http://dtrace.org/blogs/ahl/2005/04/18/dtracing-java/
+    * StreamDecoder?
+
+
+# page cache:
+* https://manybutfinite.com/post/page-cache-the-affair-between-memory-and-files/
+* https://zhuanlan.zhihu.com/p/35448479
+
+# concurrently read/write file?
+* https://stackoverflow.com/questions/816684/concurrently-read-from-a-single-file
+    * The concurrency of physical hard disk/filesystem?
+    * https://www.zhihu.com/question/264750729
+* https://hackernoon.com/leveraging-multithreading-to-read-large-files-faster-in-go-lmn32t7
