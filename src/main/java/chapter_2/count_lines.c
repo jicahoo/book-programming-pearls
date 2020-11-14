@@ -3,6 +3,14 @@
  */
 #include <stdio.h>
  
+/*
+
+handle a file about 40G and 4*10^9 lines.
+real	3m26.356s
+user	1m16.178s
+sys	2m5.630s
+
+*/
 int main()
 {
     FILE *fileptr;

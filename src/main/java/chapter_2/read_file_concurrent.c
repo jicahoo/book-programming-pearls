@@ -5,6 +5,17 @@
 // fseek ftell.
 //https://www.quora.com/How-can-I-read-a-file-form-middle-in-C-For-exam-we-can-give-position-to-fseek-method-in-the-same-way-how-can-we-read-file-from-a-particular-position
 
+/*
+
+handle a file about 40G and 4*10^9 lines.
+
+time result:
+
+real	7m24.099s
+user	11m12.078s
+sys	3m33.609s
+
+*/
 typedef struct FileRange {
     FILE *fp;
     long int firstIdx;
