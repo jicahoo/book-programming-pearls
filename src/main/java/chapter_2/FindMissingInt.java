@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -75,6 +76,68 @@ public class FindMissingInt {
             }
         }
         throw new IllegalStateException("Impossible here. Why?");
+    }
+    public int findMissingIntV2(final String filePath, int first, int last) throws IOException {
+        assert first <= last; //Why can first can == last.
+
+        Path inputFilePath = Paths.get(filePath);
+        Iterator<String> ints = Files.lines(inputFilePath).iterator();
+        double halfCount = ((long) last - (long) first)/2.0;
+        double mid = first + halfCount;
+        boolean midIsInt = false;
+        if ((mid == Math.floor(mid)) && !Double.isInfinite(mid)) {
+            midIsInt = true;
+        }
+
+        boolean gotMid = false;
+        String lessFilePath = BASE_DIR + "less" + mid + ".txt";
+        BufferedWriter lessFile = new BufferedWriter(new FileWriter(lessFilePath));
+        int lessCounter = 0;
+        String greaterFilePath = BASE_DIR + "greater" + mid + ".txt";
+        BufferedWriter greaterFile = new BufferedWriter(new FileWriter(greaterFilePath));
+        int greaterCounter = 0;
+
+        while (ints.hasNext()) {
+            String intStr = ints.next();
+            int i = Integer.parseInt(intStr);
+            if (midIsInt && i == (int)mid) {
+                gotMid = true;
+            } else if (i < mid) {
+                lessFile.write(intStr);
+                lessFile.newLine();
+                lessCounter++;
+            } else {
+                greaterFile.write(intStr);
+                greaterFile.newLine();
+                greaterCounter++;
+            }
+        }
+        lessFile.close();
+        greaterFile.close();
+        Files.deleteIfExists(inputFilePath);
+
+        if (midIsInt && !gotMid) {
+            return (int)mid;
+        }
+
+        if (lessCounter < halfCount) {
+            Files.deleteIfExists(Paths.get(greaterFilePath));
+            if (midIsInt) {
+                return findMissingIntV2(lessFilePath, first, (int)mid - 1);
+            } else {
+                return findMissingIntV2(lessFilePath, first, (int) Math.floor(mid));
+            }
+        }
+        if (greaterCounter < halfCount) {
+            Files.deleteIfExists(Paths.get(lessFilePath));
+            if (midIsInt) {
+                return findMissingIntV2(greaterFilePath, (int)mid + 1 , last);
+            } else {
+                return findMissingIntV2(greaterFilePath, (int) Math.ceil(mid), last);
+            }
+        }
+        String msg = "mid: " + mid + ", lessCounter: " + lessCounter + ", greaterCounter: " + greaterCounter;
+        throw new IllegalStateException("Impossible here. Why? hint: " + msg);
     }
 
     public static void searchIntRange(int first, int last) {
@@ -315,14 +378,14 @@ public class FindMissingInt {
     }
 
     public void generateInputFile() throws IOException {
-        String filePath = BASE_DIR + "input-small.txt";
+        String filePath = BASE_DIR + "input.txt";
         BufferedWriter inputFile = new BufferedWriter(new FileWriter(filePath));
-        long cap =  4 * (long)Math.pow(10, 3);
+        long cap =  2 * (long)Math.pow(10, 9);
         //long cap =  4 * (long)Math.pow(10, 9);  will generate a big file with size 40 GB!
         System.out.println(cap);
+        Random r = new Random();
         for (long i = 0; i < cap; i++) {
-            Random r = new Random();
-            inputFile.write(""+r.nextInt());
+            inputFile.write(""+r.nextInt(Integer.MAX_VALUE));
             inputFile.newLine();
         }
         inputFile.close();
@@ -351,7 +414,10 @@ public class FindMissingInt {
     }
 
     public static void main(String[] args) throws IOException {
-        //testBinarySearch();
-        testBinarySearch();
+        FindMissingInt s = new FindMissingInt();
+        int missInt = s.findMissingIntV2(BASE_DIR + "input.txt", 0, Integer.MAX_VALUE);
+        System.out.println("Missing " + missInt);
+//        s.generateInputFile();
+
     }
 }
