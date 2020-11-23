@@ -15,6 +15,15 @@ import java.util.Random;
 public class FindMissingInt {
     private static String BASE_DIR = "src/main/java/chapter_2/";
 
+    public long findMissingIntV2Cnt = 0;
+    public long tailCnt = 0;
+    public long avgDur = 0;
+    public long avgDurSec = 0;
+    public long avgDurThird = 0;
+    public FindMissingInt(){
+        this.findMissingIntV2Cnt = 0;
+    }
+
     public int findMissingInt(String filePath, int first, int last) throws IOException {
 
         Iterator<String> ints = Files.lines(Paths.get(filePath)).iterator();
@@ -78,6 +87,8 @@ public class FindMissingInt {
         throw new IllegalStateException("Impossible here. Why?");
     }
     public int findMissingIntV2(final String filePath, int first, int last) throws IOException {
+        long start = System.nanoTime();
+        findMissingIntV2Cnt++;
         assert first <= last; //Why can first can == last.
 
         Path inputFilePath = Paths.get(filePath);
@@ -96,6 +107,14 @@ public class FindMissingInt {
         String greaterFilePath = BASE_DIR + "greater" + mid + ".txt";
         BufferedWriter greaterFile = new BufferedWriter(new FileWriter(greaterFilePath));
         int greaterCounter = 0;
+
+        long two = System.nanoTime();
+        long dur = two - start;
+        if (avgDur != 0) {
+            avgDur = (avgDur+dur)/2;
+        } else {
+            avgDur = dur;
+        }
 
         while (ints.hasNext()) {
             String intStr = ints.next();
@@ -116,28 +135,47 @@ public class FindMissingInt {
         greaterFile.close();
         Files.deleteIfExists(inputFilePath);
 
-        if (midIsInt && !gotMid) {
-            return (int)mid;
+        long three = System.nanoTime();
+        long durSec = three - two;
+        if (avgDurSec == 0) {
+            avgDurSec = durSec;
+        } else {
+            avgDurSec = (avgDurSec  + durSec)/2;
         }
 
-        if (lessCounter < halfCount) {
-            Files.deleteIfExists(Paths.get(greaterFilePath));
-            if (midIsInt) {
-                return findMissingIntV2(lessFilePath, first, (int)mid - 1);
+        int result = -1;
+        if (midIsInt && !gotMid) {
+            result = (int)mid;
+        } else {
+            if (lessCounter < halfCount) {
+                Files.deleteIfExists(Paths.get(greaterFilePath));
+                if (midIsInt) {
+                    result = findMissingIntV2(lessFilePath, first, (int)mid - 1);
+                } else {
+                    result = findMissingIntV2(lessFilePath, first, (int) Math.floor(mid));
+                }
             } else {
-                return findMissingIntV2(lessFilePath, first, (int) Math.floor(mid));
+                Files.deleteIfExists(Paths.get(lessFilePath));
+                if (midIsInt) {
+                    result = findMissingIntV2(greaterFilePath, (int)mid + 1 , last);
+                } else {
+                    result = findMissingIntV2(greaterFilePath, (int) Math.ceil(mid), last);
+                }
             }
         }
-        if (greaterCounter < halfCount) {
-            Files.deleteIfExists(Paths.get(lessFilePath));
-            if (midIsInt) {
-                return findMissingIntV2(greaterFilePath, (int)mid + 1 , last);
-            } else {
-                return findMissingIntV2(greaterFilePath, (int) Math.ceil(mid), last);
-            }
+        if (result < 0) {
+            String msg = "mid: " + mid + ", lessCounter: " + lessCounter + ", greaterCounter: " + greaterCounter;
+            throw new IllegalStateException("Impossible here. Why? hint: " + msg);
         }
-        String msg = "mid: " + mid + ", lessCounter: " + lessCounter + ", greaterCounter: " + greaterCounter;
-        throw new IllegalStateException("Impossible here. Why? hint: " + msg);
+        long four = System.nanoTime();
+        long durThird = four - three;
+        if (avgDurThird == 0) {
+            avgDurThird = durThird;
+        } else {
+            avgDurThird = (avgDurThird  + durThird)/2;
+        }
+        tailCnt++;
+        return result;
     }
 
     public static void searchIntRange(int first, int last) {
@@ -378,9 +416,9 @@ public class FindMissingInt {
     }
 
     public void generateInputFile() throws IOException {
-        String filePath = BASE_DIR + "input.txt";
+        String filePath = BASE_DIR + "input-100mb.txt";
         BufferedWriter inputFile = new BufferedWriter(new FileWriter(filePath));
-        long cap =  2 * (long)Math.pow(10, 9);
+        long cap =  2 * (long)Math.pow(10, 9)/200;
         //long cap =  4 * (long)Math.pow(10, 9);  will generate a big file with size 40 GB!
         System.out.println(cap);
         Random r = new Random();
@@ -413,11 +451,49 @@ public class FindMissingInt {
         System.out.println(missingInt);
     }
 
-    public static void main(String[] args) throws IOException {
+    public int fib(int n) {
+        if (n == 0) {
+            return 0;
+        } else if (n == 1) {
+            return 1;
+        } else {
+            return fib(n-1) + fib(n - 2);
+        }
+
+    }
+
+    public static void testFindMissing() throws IOException {
+
         FindMissingInt s = new FindMissingInt();
         int missInt = s.findMissingIntV2(BASE_DIR + "input.txt", 0, Integer.MAX_VALUE);
+        /**
+         Missing 16
+
+         real	15m15.698s
+         user	9m33.865s
+         sys	5m16.316s
+
+         real	0m2.988s
+         user	0m2.786s
+         sys	0m0.923s
+
+         */
         System.out.println("Missing " + missInt);
-//        s.generateInputFile();
+        System.out.println("Call cnt: " + s.findMissingIntV2Cnt);
+        System.out.println("Tail cnt: " + s.tailCnt);
+        System.out.println("Dur: " + s.avgDur);
+        System.out.println("Second Dur: " + s.avgDurSec);
+        System.out.println("Thrid Dur: " + s.avgDurThird);
+
+        //s.generateInputFile();
+
+    }
+
+    public static void main(String[] args) throws IOException {
+        FindMissingInt s = new FindMissingInt();
+        int fb = s.fib(45);
+        System.out.println(fb);
+
 
     }
 }
