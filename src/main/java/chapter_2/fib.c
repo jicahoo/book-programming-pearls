@@ -10,6 +10,6 @@ int fib(int n) {
     }
 }
 int main() {
-    int f = fib(45);
+    int f = fib(37);
     printf("%d\n", f);
 }
