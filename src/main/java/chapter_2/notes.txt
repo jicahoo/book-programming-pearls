@@ -31,3 +31,10 @@ fio --name=big-file-sequential-read \
     * The concurrency of physical hard disk/filesystem?
     * https://www.zhihu.com/question/264750729
 * https://hackernoon.com/leveraging-multithreading-to-read-large-files-faster-in-go-lmn32t7
+
+# Function call 
+* https://flylib.com/books/en/2.253.1/function_call_stack_and_activation_records.html
+* https://www.cs.princeton.edu/courses/archive/spring03/cs320/notes/7-1.pdf
+* http://people.cs.ksu.edu/~schmidt/300s05/Lectures/Lecture3.html
+* https://www.tenouk.com/Bufferoverflowc/bufferoverflowvulexploitdemo31.html
+* https://www.cs.princeton.edu/courses/archive/spring11/cos217/lectures/15AssemblyFunctions.pdf

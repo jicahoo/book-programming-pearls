@@ -491,7 +491,7 @@ public class FindMissingInt {
 
     public static void main(String[] args) throws IOException {
         FindMissingInt s = new FindMissingInt();
-        int fb = s.fib(45);
+        int fb = s.fib(37);
         System.out.println(fb);
 
 
