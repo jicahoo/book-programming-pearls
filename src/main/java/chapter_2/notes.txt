@@ -38,3 +38,6 @@ fio --name=big-file-sequential-read \
 * http://people.cs.ksu.edu/~schmidt/300s05/Lectures/Lecture3.html
 * https://www.tenouk.com/Bufferoverflowc/bufferoverflowvulexploitdemo31.html
 * https://www.cs.princeton.edu/courses/archive/spring11/cos217/lectures/15AssemblyFunctions.pdf
+
+# recursive call
+* the steps of recursive call.
